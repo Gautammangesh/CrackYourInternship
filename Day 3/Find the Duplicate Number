@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Solution {
     public int findDuplicate(int[] nums) {
         // Initialize the slow and fast pointers
@@ -20,4 +21,28 @@ class Solution {
         // The point of intersection is the duplicate number
         return slow;
     }
+=======
+class Solution {
+    public int findDuplicate(int[] nums) {
+        // Initialize the slow and fast pointers
+        int slow = nums[0];
+        int fast = nums[0];
+        
+        // Phase 1: Finding the intersection point of the two runners
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+        
+        // Phase 2: Finding the entrance to the cycle
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        
+        // The point of intersection is the duplicate number
+        return slow;
+    }
+>>>>>>> c12f2fecff96948c269a28e567d4a62e03f6e97e
 }

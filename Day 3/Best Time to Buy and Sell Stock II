@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Solution {
     public int maxProfit(int[] prices) {
         if (prices.length == 0) return 0;
@@ -16,4 +17,24 @@ class Solution {
         }
         return maxPro;
     }
+=======
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) return 0;
+        
+        int buy = prices[0];
+        int maxPro = 0;
+
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] <= buy) {
+                buy = prices[i];
+            } else {
+                int profit = prices[i] - buy;
+                maxPro += profit;
+                buy = prices[i];
+            }
+        }
+        return maxPro;
+    }
+>>>>>>> c12f2fecff96948c269a28e567d4a62e03f6e97e
 }

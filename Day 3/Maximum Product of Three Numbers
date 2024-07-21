@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Solution {
     public int maximumProduct(int[] nums) {
      Arrays.sort(nums);
@@ -18,4 +19,26 @@ class Solution {
 
         return (int) Math.max(ans1, ans2);   
     }
+=======
+class Solution {
+    public int maximumProduct(int[] nums) {
+     Arrays.sort(nums);
+        int n = nums.length;
+        
+        // Calculate product of two smallest and the largest number
+        long ans1 = 1;
+        for (int i = 0; i < 2; i++) {
+            ans1 *= nums[i];
+        }
+        ans1 *= nums[n - 1];
+
+        // Calculate product of three largest numbers
+        long ans2 = 1;
+        for (int i = n - 1; i >= n - 3; i--) {
+            ans2 *= nums[i];
+        }
+
+        return (int) Math.max(ans1, ans2);   
+    }
+>>>>>>> c12f2fecff96948c269a28e567d4a62e03f6e97e
 }

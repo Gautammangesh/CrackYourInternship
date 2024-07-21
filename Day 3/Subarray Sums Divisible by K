@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Solution {
     public int subarraysDivByK(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap<>();
@@ -15,4 +16,23 @@ class Solution {
         
         return ans;
     }
+=======
+class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        int ans = 0;
+        int sum = 0;
+        
+        for (int num : nums) {
+            sum += num;
+            int rem = ((sum % k) + k) % k;  // Handle negative remainder
+
+            ans += map.getOrDefault(rem, 0);
+            map.put(rem, map.getOrDefault(rem, 0) + 1);
+        }
+        
+        return ans;
+    }
+>>>>>>> c12f2fecff96948c269a28e567d4a62e03f6e97e
 }

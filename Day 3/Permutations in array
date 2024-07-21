@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class Solution {
     public boolean isPossible(long[] arr1, long[] arr2, int n, long k) {
         // Sort arr1 in ascending order
@@ -14,4 +15,22 @@ class Solution {
 
         return true;
     }
+=======
+class Solution {
+    public boolean isPossible(long[] arr1, long[] arr2, int n, long k) {
+        // Sort arr1 in ascending order
+        Arrays.sort(arr1);
+        // Sort arr2 in descending order
+        Arrays.sort(arr2);
+        
+        // Check if arr1[i] + arr2[n-1-i] >= k for all i
+        for (int i = 0; i < n; i++) {
+            if (arr1[i] + arr2[n - 1 - i] < k) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+>>>>>>> c12f2fecff96948c269a28e567d4a62e03f6e97e
 }
