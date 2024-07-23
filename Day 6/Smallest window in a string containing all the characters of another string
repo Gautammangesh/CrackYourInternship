@@ -1,0 +1,48 @@
+class Solution {
+    public String smallestWindow(String s, String p) {
+        if (s.length() < p.length()) return "-1";
+
+        int[] mp = new int[26];
+        int[] ms = new int[26];
+
+        for (char c : p.toCharArray()) {
+            mp[c - 'a']++;
+        }
+
+        int have = 0, need = 0;
+        for (int count : mp) {
+            if (count > 0) need++;
+        }
+
+        int j = 0, mini = Integer.MAX_VALUE;
+        int start = -1, end = -1;
+
+        for (int i = 0; i < s.length(); i++) {
+            ms[s.charAt(i) - 'a']++;
+
+            if (mp[s.charAt(i) - 'a'] > 0 && ms[s.charAt(i) - 'a'] == mp[s.charAt(i) - 'a']) {
+                have++;
+            }
+
+            while (have == need) {
+                if (i - j + 1 < mini) {
+                    mini = i - j + 1;
+                    start = j;
+                    end = i;
+                }
+
+                ms[s.charAt(j) - 'a']--;
+                if (mp[s.charAt(j) - 'a'] > 0 && ms[s.charAt(j) - 'a'] < mp[s.charAt(j) - 'a']) {
+                    have--;
+                }
+                j++;
+            }
+        }
+
+        if (start == -1) {
+            return "-1";
+        }
+
+        return s.substring(start, end + 1);
+    }
+}

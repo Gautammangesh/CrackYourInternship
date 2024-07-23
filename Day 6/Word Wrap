@@ -1,0 +1,25 @@
+class Solution {
+    public int solveWordWrap(int[] nums, int k) {
+        int n = nums.length;
+        int[] dp = new int[n];
+
+        Arrays.fill(dp, Integer.MAX_VALUE);
+
+        // Initialize last word's cost to 0 as no extra space required for the last word
+        dp[n - 1] = 0;
+
+        // Fill dp array from end to start
+        for (int i = n - 2; i >= 0; i--) {
+            int currLen = -1;
+            dp[i] = Integer.MAX_VALUE;
+            for (int j = i; j < n; j++) {
+                currLen += (nums[j] + 1); // +1 to account for the space between words
+                if (currLen > k) break;
+                int currentCost = (j == n - 1) ? 0 : (k - currLen) * (k - currLen) + dp[j + 1];
+                dp[i] = Math.min(dp[i], currentCost);
+            }
+        }
+
+        return dp[0];
+    }
+}
