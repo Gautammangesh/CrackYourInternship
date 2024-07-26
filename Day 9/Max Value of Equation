@@ -1,0 +1,27 @@
+class Solution {
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        // Max heap to keep track of the best (yi - xi) values seen so far
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+        int maxValue = Integer.MIN_VALUE;
+
+        for (int[] point : points) {
+            int xj = point[0];
+            int yj = point[1];
+
+            // Remove points from the heap that are not within the window of |xi - xj| <= k
+            while (!maxHeap.isEmpty() && xj - maxHeap.peek()[1] > k) {
+                maxHeap.poll();
+            }
+
+            // Calculate the potential max value of the equation yi + yj + |xi - xj|
+            if (!maxHeap.isEmpty()) {
+                maxValue = Math.max(maxValue, yj + xj + maxHeap.peek()[0]);
+            }
+
+            // Add the current point to the heap with value (yi - xi)
+            maxHeap.offer(new int[]{yj - xj, xj});
+        }
+
+        return maxValue;
+    }
+}
