@@ -1,0 +1,60 @@
+class Solution {
+    // Function to find the minimum number of swaps required to sort the array.
+    public int minSwaps(int nums[]) {
+        int n = nums.length;
+
+        // Create an array of pairs where first element is array element and second element is its position
+        Pair[] arrPos = new Pair[n];
+        for (int i = 0; i < n; i++) {
+            arrPos[i] = new Pair(nums[i], i);
+        }
+
+        // Sort the array by array element values to get the right position of elements
+        Arrays.sort(arrPos, (a, b) -> a.value - b.value);
+
+        // To keep track of visited elements
+        boolean[] visited = new boolean[n];
+        Arrays.fill(visited, false);
+
+        // Initialize the number of swaps to 0
+        int swaps = 0;
+
+        // Traverse array elements
+        for (int i = 0; i < n; i++) {
+            // If element is already visited or is already in the correct position
+            if (visited[i] || arrPos[i].index == i) {
+                continue;
+            }
+
+            // Find out the number of nodes in this cycle and add it to the swap count
+            int cycleSize = 0;
+            int j = i;
+
+            while (!visited[j]) {
+                visited[j] = true;
+
+                // Move to the next node
+                j = arrPos[j].index;
+                cycleSize++;
+            }
+
+            // If there is a cycle of size k, then we need (k-1) swaps
+            if (cycleSize > 0) {
+                swaps += (cycleSize - 1);
+            }
+        }
+
+        // Return the number of swaps
+        return swaps;
+    }
+
+    // Helper class to store array element and its index
+    static class Pair {
+        int value, index;
+
+        Pair(int value, int index) {
+            this.value = value;
+            this.index = index;
+        }
+    }
+}
