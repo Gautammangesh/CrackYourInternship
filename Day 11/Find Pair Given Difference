@@ -1,0 +1,19 @@
+class Solution {
+    public int findPair(int n, int x, int[] arr) {
+        // Create a HashSet to store elements
+        HashSet<Integer> set = new HashSet<>();
+
+        // Iterate through each element in the array
+        for (int i = 0; i < n; i++) {
+            // Check if there exists an element with absolute difference x
+            if (set.contains(arr[i] + x) || set.contains(arr[i] - x)) {
+                return 1;
+            }
+            // Add the current element to the set
+            set.add(arr[i]);
+        }
+
+        // If no such pair is found, return -1
+        return -1;
+    }
+}
