@@ -1,0 +1,54 @@
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+class Solution {
+    Node compute(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // Reverse the linked list
+        head = reverse(head);
+
+        Node current = head;
+        Node maxNode = head;
+        Node temp = head;
+
+        // Traverse the reversed list
+        while (temp != null && temp.next != null) {
+            if (temp.next.data < maxNode.data) {
+                // Remove the node if the next node's value is less than the maximum value
+                temp.next = temp.next.next;
+            } else {
+                // Update maxNode and move temp forward
+                temp = temp.next;
+                maxNode = temp;
+            }
+        }
+
+        // Reverse the list again to restore the original order
+        head = reverse(head);
+        return head;
+    }
+
+    // Helper function to reverse the linked list
+    Node reverse(Node head) {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+}
