@@ -1,0 +1,61 @@
+class twoStacks {
+    int[] arr; // Array to hold both stacks
+    int size; // Size of the array
+    int top1, top2; // Top pointers for both stacks
+    
+    // Constructor to initialize the data structures.
+    twoStacks(int n) {
+        size = n;
+        arr = new int[n];
+        top1 = -1; // Initialize top of stack1
+        top2 = n; // Initialize top of stack2
+    }
+
+    // Function to push an integer into stack1.
+    void push1(int x) {
+        // Check if there's space between top1 and top2
+        if (top1 < top2 - 1) {
+            top1++;
+            arr[top1] = x;
+        } else {
+            System.out.println("Stack Overflow");
+            return;
+        }
+    }
+
+    // Function to push an integer into stack2.
+    void push2(int x) {
+        // Check if there's space between top1 and top2
+        if (top1 < top2 - 1) {
+            top2--;
+            arr[top2] = x;
+        } else {
+            System.out.println("Stack Overflow");
+            return;
+        }
+    }
+
+    // Function to remove an element from top of stack1.
+    int pop1() {
+        // Check if stack1 is empty
+        if (top1 >= 0) {
+            int x = arr[top1];
+            top1--;
+            return x;
+        } else {
+            return -1; // Stack1 is empty
+        }
+    }
+
+    // Function to remove an element from top of stack2.
+    int pop2() {
+        // Check if stack2 is empty
+        if (top2 < size) {
+            int x = arr[top2];
+            top2++;
+            return x;
+        } else {
+            return -1; // Stack2 is empty
+        }
+    }
+}
