@@ -1,0 +1,58 @@
+class Solution 
+{
+    // Function to find maximum of minimums of every window size.
+    static int[] maxOfMin(int[] arr, int n) 
+    {
+        // Arrays to store the index of previous and next smaller elements
+        int[] left = new int[n];
+        int[] right = new int[n];
+
+        // Stack for the indexes
+        Stack<Integer> stack = new Stack<>();
+
+        // Initialize the left array
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+            left[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+
+        // Clear the stack to reuse it
+        stack.clear();
+
+        // Initialize the right array
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+            right[i] = stack.isEmpty() ? n : stack.peek();
+            stack.push(i);
+        }
+
+        // Array to store results
+        int[] ans = new int[n + 1];
+
+        // Fill the answers array by considering lengths of windows
+        for (int i = 0; i < n; i++) {
+            // Length of window where arr[i] is the minimum
+            int len = right[i] - left[i] - 1;
+            // Update the result for that window length
+            ans[len] = Math.max(ans[len], arr[i]);
+        }
+
+        // Fill the empty entries in the ans array
+        for (int i = n - 1; i >= 1; i--) {
+            ans[i] = Math.max(ans[i], ans[i + 1]);
+        }
+
+        // Copy the results to the array of the exact size
+        int[] result = new int[n];
+        for (int i = 1; i <= n; i++) {
+            result[i - 1] = ans[i];
+        }
+
+        return result;
+    }
+}
