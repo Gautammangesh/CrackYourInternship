@@ -1,0 +1,43 @@
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int d) {
+        data = d;
+        left = right = null;
+    }
+}
+
+class Solution {
+    Node head = null;  // Head of the DLL
+    Node prev = null;  // Previous node in DLL
+
+    // Function to convert binary tree to doubly linked list and return it.
+    Node bToDLL(Node root) {
+        // Perform in-order traversal and modify pointers
+        convertToDLL(root);
+        return head;
+    }
+
+    // Helper function to perform in-order traversal and adjust pointers
+    private void convertToDLL(Node root) {
+        if (root == null) return;
+
+        // Recursively convert the left subtree
+        convertToDLL(root.left);
+
+        // Process the current node
+        if (prev == null) {
+            // If prev is null, then we're at the leftmost node, which will be head of the DLL
+            head = root;
+        } else {
+            // Adjust pointers
+            root.left = prev;
+            prev.right = root;
+        }
+        prev = root;  // Move prev to current node
+
+        // Recursively convert the right subtree
+        convertToDLL(root.right);
+    }
+}
