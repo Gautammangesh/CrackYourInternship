@@ -1,0 +1,58 @@
+class Tree {
+    // Function to count the number of nodes in the BST
+    private static int countNodes(Node root) {
+        if (root == null) return 0;
+        return countNodes(root.left) + countNodes(root.right) + 1;
+    }
+
+    // Function to find the k-th node in an in-order traversal
+    private static void findKthNode(Node root, int k, int[] count, Node[] result) {
+        if (root == null || result[0] != null) return;
+
+        // Traverse the left subtree
+        findKthNode(root.left, k, count, result);
+
+        // Increment count of visited nodes
+        count[0]++;
+        if (count[0] == k) {
+            result[0] = root;
+            return;
+        }
+
+        // Traverse the right subtree
+        findKthNode(root.right, k, count, result);
+    }
+
+    public static float findMedian(Node root) {
+        if (root == null) return 0;
+
+        int n = countNodes(root);
+        if (n % 2 != 0) { // If the size of the tree is odd
+            int[] count = {0};
+            Node[] medianNode = {null};
+            findKthNode(root, n / 2 + 1, count, medianNode);
+            return (float) medianNode[0].data;
+        } else { // If the size of the tree is even
+            int[] count1 = {0};
+            int[] count2 = {0};
+            Node[] medianNode1 = {null};
+            Node[] medianNode2 = {null};
+
+            findKthNode(root, n / 2, count1, medianNode1);
+            findKthNode(root, n / 2 + 1, count2, medianNode2);
+
+            return (float) (medianNode1[0].data + medianNode2[0].data) / 2;
+        }
+    }
+}
+
+// Definition for a binary tree node.
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}

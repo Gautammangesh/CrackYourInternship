@@ -1,0 +1,46 @@
+/*class Node{
+    int data;
+    Node left,right;
+    Node(int d)
+    {
+        data=d;
+        left=right=null;
+    }
+}*/
+
+class Solution {
+    // To keep track of index in the pre[] and preLN[] arrays
+    static int index = 0;
+
+    Node constructTree(int n, int pre[], char preLN[]) {
+        // Reset the index before constructing the tree
+        index = 0;
+        return constructTreeUtil(n, pre, preLN);
+    }
+
+    private Node constructTreeUtil(int n, int pre[], char preLN[]) {
+        // Base case
+        if (index == n) {
+            return null;
+        }
+
+        // Create a new node with the current value of pre[index]
+        Node node = new Node(pre[index]);
+
+        // Check if the current node is a leaf or a non-leaf node
+        if (preLN[index] == 'L') {
+            // Leaf node, move to the next index
+            index++;
+            return node;
+        }
+
+        // Move to the next index for the left and right children
+        index++;
+
+        // Recursively construct the left and right subtrees
+        node.left = constructTreeUtil(n, pre, preLN);
+        node.right = constructTreeUtil(n, pre, preLN);
+
+        return node;
+    }
+}

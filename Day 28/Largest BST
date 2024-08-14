@@ -1,0 +1,56 @@
+class Solution {
+
+    // Helper class to store information about the subtree
+    static class SubtreeInfo {
+        int size;     // Size of the largest BST
+        int min;      // Minimum value in the subtree
+        int max;      // Maximum value in the subtree
+        boolean isBST; // Whether the subtree is a BST
+
+        SubtreeInfo(int size, int min, int max, boolean isBST) {
+            this.size = size;
+            this.min = min;
+            this.max = max;
+            this.isBST = isBST;
+        }
+    }
+
+    // Main function to find the size of the largest BST subtree
+    static int largestBst(Node root) {
+        return largestBSTHelper(root).size;
+    }
+
+    // Helper function to find the largest BST in the subtree rooted at 'node'
+    private static SubtreeInfo largestBSTHelper(Node node) {
+        // An empty tree is a BST of size 0
+        if (node == null) {
+            return new SubtreeInfo(0, Integer.MAX_VALUE, Integer.MIN_VALUE, true);
+        }
+
+        // Recursively get information about the left and right subtrees
+        SubtreeInfo left = largestBSTHelper(node.left);
+        SubtreeInfo right = largestBSTHelper(node.right);
+
+        // Current node's subtree
+        if (left.isBST && right.isBST && node.data > left.max && node.data < right.min) {
+            int size = left.size + right.size + 1;
+            int min = Math.min(node.data, left.min);
+            int max = Math.max(node.data, right.max);
+            return new SubtreeInfo(size, min, max, true);
+        }
+
+        // If not a BST, return the maximum size of any BST in the left or right subtrees
+        return new SubtreeInfo(Math.max(left.size, right.size), 0, 0, false);
+    }
+}
+
+// Definition for a binary tree node.
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
