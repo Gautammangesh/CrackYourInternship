@@ -1,0 +1,40 @@
+class Solution {
+    // Function to detect cycle in an undirected graph.
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        boolean[] visited = new boolean[V];
+        
+        // Check for cycle in different DFS trees.
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                // If a cycle is found in the DFS tree rooted at 'i', return true.
+                if (dfs(i, -1, visited, adj)) {
+                    return true;
+                }
+            }
+        }
+        // If no cycle is found, return false.
+        return false;
+    }
+    
+    // Helper function to perform DFS recursively and check for cycles.
+    private boolean dfs(int node, int parent, boolean[] visited, ArrayList<ArrayList<Integer>> adj) {
+        // Mark the current node as visited.
+        visited[node] = true;
+        
+        // Traverse all adjacent vertices.
+        for (int neighbor : adj.get(node)) {
+            // If the neighbor is not visited, do DFS on it.
+            if (!visited[neighbor]) {
+                if (dfs(neighbor, node, visited, adj)) {
+                    return true;
+                }
+            }
+            // If the neighbor is visited and is not the parent, a cycle is found.
+            else if (neighbor != parent) {
+                return true;
+            }
+        }
+        // No cycle found in this path.
+        return false;
+    }
+}
