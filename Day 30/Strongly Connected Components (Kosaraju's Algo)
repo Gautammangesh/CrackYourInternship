@@ -1,0 +1,81 @@
+class Solution
+{
+    // Function to perform DFS and push vertices into the stack according to their finish times
+    private void dfs1(int v, boolean[] visited, Stack<Integer> stack, ArrayList<ArrayList<Integer>> adj) {
+        visited[v] = true;
+
+        // Visiting all adjacent vertices
+        for (int u : adj.get(v)) {
+            if (!visited[u]) {
+                dfs1(u, visited, stack, adj);
+            }
+        }
+
+        // Push the vertex to stack after finishing all its adjacent vertices
+        stack.push(v);
+    }
+
+    // Function to perform DFS on the transposed graph
+    private void dfs2(int v, boolean[] visited, ArrayList<ArrayList<Integer>> transposeAdj) {
+        visited[v] = true;
+
+        // Visiting all adjacent vertices in the transposed graph
+        for (int u : transposeAdj.get(v)) {
+            if (!visited[u]) {
+                dfs2(u, visited, transposeAdj);
+            }
+        }
+    }
+
+    // Function to get the transpose of the graph
+    private ArrayList<ArrayList<Integer>> getTranspose(int V, ArrayList<ArrayList<Integer>> adj) {
+        ArrayList<ArrayList<Integer>> transposeAdj = new ArrayList<>();
+
+        // Initialize transpose graph
+        for (int i = 0; i < V; i++) {
+            transposeAdj.add(new ArrayList<>());
+        }
+
+        // Reverse all the edges
+        for (int v = 0; v < V; v++) {
+            for (int u : adj.get(v)) {
+                transposeAdj.get(u).add(v);
+            }
+        }
+
+        return transposeAdj;
+    }
+
+    // Function to find number of strongly connected components in the graph.
+    public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        Stack<Integer> stack = new Stack<>();
+        boolean[] visited = new boolean[V];
+
+        // Step 1: Perform DFS and store vertices according to their finish times
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs1(i, visited, stack, adj);
+            }
+        }
+
+        // Step 2: Get the transpose of the graph
+        ArrayList<ArrayList<Integer>> transposeAdj = getTranspose(V, adj);
+
+        // Step 3: Perform DFS on the transposed graph in the order of decreasing finish times
+        Arrays.fill(visited, false);
+        int sccCount = 0;
+
+        while (!stack.isEmpty()) {
+            int v = stack.pop();
+
+            // If the vertex hasn't been visited in the transposed graph, it's a new SCC
+            if (!visited[v]) {
+                dfs2(v, visited, transposeAdj);
+                sccCount++;
+            }
+        }
+
+        return sccCount;
+    }
+}

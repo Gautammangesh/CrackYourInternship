@@ -1,0 +1,59 @@
+class Solution
+{
+    // Class to represent a cell in the chessboard
+    static class Cell {
+        int x, y, dist;
+        Cell(int x, int y, int dist) {
+            this.x = x;
+            this.y = y;
+            this.dist = dist;
+        }
+    }
+
+    // Function to check if a position is within the board and valid
+    public boolean isInside(int x, int y, int N) {
+        return (x >= 1 && x <= N && y >= 1 && y <= N);
+    }
+
+    // Function to find out minimum steps Knight needs to reach target position.
+    public int minStepToReachTarget(int KnightPos[], int TargetPos[], int N) {
+        // Directions for the Knight's possible moves
+        int[] dx = {1, 1, -1, -1, 2, 2, -2, -2};
+        int[] dy = {2, -2, 2, -2, 1, -1, 1, -1};
+
+        // Queue to store the positions and distances
+        Queue<Cell> queue = new LinkedList<>();
+        
+        // Starting position of the Knight
+        queue.add(new Cell(KnightPos[0], KnightPos[1], 0));
+
+        // Visited array to keep track of visited cells
+        boolean[][] visited = new boolean[N + 1][N + 1];
+        visited[KnightPos[0]][KnightPos[1]] = true;
+
+        // BFS algorithm
+        while (!queue.isEmpty()) {
+            Cell current = queue.poll();
+
+            // If the current position is the target position
+            if (current.x == TargetPos[0] && current.y == TargetPos[1]) {
+                return current.dist;
+            }
+
+            // Exploring all possible moves
+            for (int i = 0; i < 8; i++) {
+                int x = current.x + dx[i];
+                int y = current.y + dy[i];
+
+                // If the move is valid and not yet visited
+                if (isInside(x, y, N) && !visited[x][y]) {
+                    visited[x][y] = true;
+                    queue.add(new Cell(x, y, current.dist + 1));
+                }
+            }
+        }
+
+        // If the target is unreachable, though in a valid chessboard this case won't occur
+        return -1;
+    }
+}
