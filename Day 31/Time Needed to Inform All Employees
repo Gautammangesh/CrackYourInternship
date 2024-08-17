@@ -1,0 +1,28 @@
+class Solution {
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+ArrayList<Integer>graph[]=new ArrayList[n];
+
+for(int i=0;i<n;i++)graph[i]=new ArrayList<>();//build the adjacency graph
+
+for(int i=0;i<n;i++){
+if(i==headID)continue;
+graph[manager[i]].add(i);
+}
+
+Queue<int[]> q=new LinkedList<>(); // q stores an array which stores current node at index 0 and time taken to reach that node at index 1
+int dis[]=new int[n];             //stores the amount of time required to reach that particular employee
+q.offer(new int[]{headID,0});    //no need  to keep tracking of visited nodes,cuz each employee has only one direct manager
+Queue<int[]> q=new LinkedList<>();
+int dis[]=new int[n];
+q.offer(new int[]{headID,0});
+
+while(!q.isEmpty()){
+   int t[]=q.poll();
+   dis[t[0]]=t[1];
+   for(int next:graph[t[0]]){
+   q.offer(new int[]{next,t[1]+informTime[t[0]]});
+    }
+}
+
+return Arrays.stream(dis).max().getAsInt();    //answer will be the time of the node which received the message so lately     }
+}

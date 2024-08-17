@@ -1,0 +1,46 @@
+class Solution {
+    public boolean isPossible(int N, int P, int[][] prerequisites) {
+        // Adjacency list representation of the graph
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            graph.add(new ArrayList<>());
+        }
+        
+        // Array to store in-degrees of all nodes
+        int[] inDegree = new int[N];
+        
+        // Build the graph and calculate in-degrees
+        for (int i = 0; i < P; i++) {
+            int u = prerequisites[i][1];
+            int v = prerequisites[i][0];
+            graph.get(u).add(v);
+            inDegree[v]++;
+        }
+        
+        // Queue to store all nodes with in-degree 0
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < N; i++) {
+            if (inDegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        
+        // Counter to keep track of the number of nodes visited
+        int count = 0;
+        
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            count++;
+            
+            for (int neighbor : graph.get(current)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        
+        // If count equals N, all nodes were visited, meaning it's possible to finish all tasks
+        return count == N;
+    }
+}
