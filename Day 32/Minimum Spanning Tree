@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Solution {
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        // Min-heap to select edge with minimum weight
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        // To keep track of the vertices included in the MST
+        boolean[] inMST = new boolean[V];
+        // Variable to store the sum of weights of the MST
+        int mstWeight = 0;
+        
+        // Start with the first vertex (index 0)
+        pq.add(new int[]{0, 0});
+        
+        while (!pq.isEmpty()) {
+            int[] node = pq.poll();
+            int vertex = node[0];
+            int weight = node[1];
+            
+            // Skip if the vertex is already in MST
+            if (inMST[vertex]) continue;
+            
+            // Include the vertex in MST
+            inMST[vertex] = true;
+            mstWeight += weight;
+            
+            // Add all edges of this vertex to the priority queue
+            for (int[] edge : adj.get(vertex)) {
+                int nextVertex = edge[0];
+                int edgeWeight = edge[1];
+                if (!inMST[nextVertex]) {
+                    pq.add(new int[]{nextVertex, edgeWeight});
+                }
+            }
+        }
+        
+        return mstWeight;
+    }
+}
