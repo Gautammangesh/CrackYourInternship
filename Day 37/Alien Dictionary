@@ -1,0 +1,60 @@
+import java.util.*;
+
+class Solution {
+    public String findOrder(String[] dict, int n, int k) {
+        // Create a graph with 'k' vertices (for k different characters)
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < k; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // Create an array to store the indegree of each vertex
+        int[] indegree = new int[k];
+
+        // Build the graph by comparing adjacent words in the dictionary
+        for (int i = 0; i < n - 1; i++) {
+            String word1 = dict[i];
+            String word2 = dict[i + 1];
+            for (int j = 0; j < Math.min(word1.length(), word2.length()); j++) {
+                if (word1.charAt(j) != word2.charAt(j)) {
+                    int u = word1.charAt(j) - 'a';
+                    int v = word2.charAt(j) - 'a';
+                    graph.get(u).add(v);
+                    indegree[v]++;
+                    break;
+                }
+            }
+        }
+
+        // Topological Sort using BFS (Kahn's Algorithm)
+        Queue<Integer> queue = new LinkedList<>();
+        StringBuilder order = new StringBuilder();
+
+        // Add all vertices with indegree 0 to the queue
+        for (int i = 0; i < k; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            order.append((char)(node + 'a'));
+
+            // Reduce the indegree of all adjacent vertices
+            for (int neighbor : graph.get(node)) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // If the order contains all k characters, return the result
+        if (order.length() == k) {
+            return order.toString();
+        } else {
+            return ""; // return an empty string if there's a cycle or not all nodes are covered
+        }
+    }
+}
