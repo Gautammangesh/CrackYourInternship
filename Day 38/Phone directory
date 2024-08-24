@@ -1,0 +1,51 @@
+class Solution {
+    static ArrayList<ArrayList<String>> displayContacts(int n, String contact[], String s) {
+        // Build a Trie from the contacts
+        TrieNode root = new TrieNode();
+        for (String c : contact) {
+            insert(root, c);
+        }
+        
+        // Search for each prefix of the query string s
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        for (int i = 1; i <= s.length(); i++) {
+            String prefix = s.substring(0, i);
+            ArrayList<String> matches = search(root, prefix);
+            result.add(matches.isEmpty() ? new ArrayList<>(Arrays.asList("0")) : matches);
+        }
+        
+        return result;
+    }
+
+    // Trie Node class
+    static class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        TreeSet<String> words = new TreeSet<>();
+    }
+
+    // Insert a word into the Trie
+    static void insert(TrieNode root, String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int index = c - 'a';
+            if (node.children[index] == null) {
+                node.children[index] = new TrieNode();
+            }
+            node = node.children[index];
+            node.words.add(word);
+        }
+    }
+
+    // Search for words with the given prefix in the Trie
+    static ArrayList<String> search(TrieNode root, String prefix) {
+        TrieNode node = root;
+        for (char c : prefix.toCharArray()) {
+            int index = c - 'a';
+            if (node.children[index] == null) {
+                return new ArrayList<>();
+            }
+            node = node.children[index];
+        }
+        return new ArrayList<>(node.words);
+    }
+}

@@ -1,0 +1,28 @@
+class Solution
+{
+    public static int wordBreak(String A, ArrayList<String> B )
+    {
+        // Convert ArrayList to HashSet for faster lookups
+        HashSet<String> dictionary = new HashSet<>(B);
+
+        // Create a DP array where dp[i] will be true if A.substring(0, i) can be segmented into words in dictionary
+        boolean[] dp = new boolean[A.length() + 1];
+        dp[0] = true; // An empty string can be segmented
+
+        // Check every substring of A
+        for (int i = 1; i <= A.length(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (dp[j] && dictionary.contains(A.substring(j, i)))
+                {
+                    dp[i] = true;
+                    break; // No need to check further if we found a valid segmentation
+                }
+            }
+        }
+
+        // Return 1 if the whole string A can be segmented, otherwise 0
+        return dp[A.length()] ? 1 : 0;
+    }
+}
