@@ -1,0 +1,75 @@
+class Solution {
+    // Define the keypad matrix
+    private static final int[][] keypad = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+        {-1, 0, -1}  // -1 represents invalid keys (* and #)
+    };
+    
+    // Define the possible moves (up, down, left, right, and staying on the same key)
+    private static final int[][] moves = {
+        {0, 0},    // stay
+        {0, 1},    // right
+        {1, 0},    // down
+        {0, -1},   // left
+        {-1, 0}    // up
+    };
+    
+    // Memoization array to store results of subproblems
+    private long[][][] memo;
+    
+    public long getCount(int n) {
+        // Initialize memoization array with -1 (indicating unvisited states)
+        memo = new long[4][3][n + 1];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < n + 1; k++) {
+                    memo[i][j][k] = -1;
+                }
+            }
+        }
+        
+        long totalCount = 0;
+        
+        // Start from every possible key (excluding * and #)
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (keypad[i][j] != -1) {
+                    totalCount += getCountUtil(i, j, n);
+                }
+            }
+        }
+        
+        return totalCount;
+    }
+    
+    private long getCountUtil(int i, int j, int n) {
+        // Base case: if sequence length is 1, there's only one sequence possible
+        if (n == 1) {
+            return 1;
+        }
+        
+        // If this subproblem has already been solved, return the result from memo
+        if (memo[i][j][n] != -1) {
+            return memo[i][j][n];
+        }
+        
+        long count = 0;
+        
+        // Explore all possible moves from the current key
+        for (int[] move : moves) {
+            int ni = i + move[0];
+            int nj = j + move[1];
+            
+            // Check if the move is valid (within bounds and not an invalid key)
+            if (ni >= 0 && ni < 4 && nj >= 0 && nj < 3 && keypad[ni][nj] != -1) {
+                count += getCountUtil(ni, nj, n - 1);
+            }
+        }
+        
+        // Memoize the result before returning
+        memo[i][j][n] = count;
+        return count;
+    }
+}
