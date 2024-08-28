@@ -1,0 +1,27 @@
+class Solution {
+    static boolean equalPartition(int N, int arr[]) {
+        int sum = 0;
+        for (int num : arr) {
+            sum += num;
+        }
+
+        if (sum % 2 != 0) {
+            // If the total sum is odd, it cannot be partitioned equally
+            return false;
+        }
+
+        int targetSum = sum / 2;
+        boolean[] dp = new boolean[targetSum + 1];
+        dp[0] = true;
+
+        for (int i = 0; i < N; i++) {
+            for (int j = targetSum; j >= arr[i]; j--) {
+                if (dp[j - arr[i]]) {
+                    dp[j] = true;
+                }
+            }
+        }
+
+        return dp[targetSum];
+    }
+}
