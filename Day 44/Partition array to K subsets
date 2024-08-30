@@ -1,0 +1,54 @@
+class Solution {
+    public boolean isKPartitionPossible(int a[], int n, int k) {
+        // Calculate the sum of all elements in the array
+        int sum = 0;
+        for (int num : a) {
+            sum += num;
+        }
+
+        // If sum is not divisible by k, we can't partition it into k equal sum subsets
+        if (sum % k != 0) {
+            return false;
+        }
+
+        // Each subset must sum up to this value
+        int subsetSum = sum / k;
+
+        // Array to keep track of whether an element is included in a subset
+        boolean[] visited = new boolean[n];
+
+        // Start the backtracking process
+        return canPartition(0, a, visited, k, 0, subsetSum);
+    }
+
+    private boolean canPartition(int start, int[] a, boolean[] visited, int k, int currentSum, int subsetSum) {
+        // If we've successfully created k-1 subsets, the remaining elements must form the k-th subset
+        if (k == 1) {
+            return true;
+        }
+
+        // If the current subset's sum matches the target subset sum, proceed to create the next subset
+        if (currentSum == subsetSum) {
+            return canPartition(0, a, visited, k - 1, 0, subsetSum);
+        }
+
+        // Try to include each element in the current subset
+        for (int i = start; i < a.length; i++) {
+            if (!visited[i] && currentSum + a[i] <= subsetSum) {
+                // Mark the element as visited
+                visited[i] = true;
+
+                // Recur with the updated sum
+                if (canPartition(i + 1, a, visited, k, currentSum + a[i], subsetSum)) {
+                    return true;
+                }
+
+                // Backtrack and unmark the element as visited
+                visited[i] = false;
+            }
+        }
+
+        // If no valid partitioning is found
+        return false;
+    }
+}

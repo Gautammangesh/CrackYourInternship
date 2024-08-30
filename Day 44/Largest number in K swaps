@@ -1,0 +1,65 @@
+class Solution {
+    // To store the maximum number as a string globally
+    private static String max;
+
+    // Function to find the largest number after k swaps.
+    public static String findMaximumNum(String str, int k) {
+        // Initialize max with the original number
+        max = str;
+
+        // Call the helper function to perform swaps
+        findMaximumNumHelper(str.toCharArray(), k, 0);
+
+        return max;
+    }
+
+    // Helper function to perform the swaps
+    private static void findMaximumNumHelper(char[] str, int k, int index) {
+        // If no swaps left or we have reached the end of the string
+        if (k == 0 || index == str.length) {
+            return;
+        }
+
+        char maxChar = str[index];
+
+        // Find the maximum digit in the remaining part of the string
+        for (int i = index + 1; i < str.length; i++) {
+            if (str[i] > maxChar) {
+                maxChar = str[i];
+            }
+        }
+
+        // If the current digit is the maximum possible, no need to swap
+        if (maxChar != str[index]) {
+            // Try swapping the current digit with every digit that is equal to the maximum
+            for (int i = index + 1; i < str.length; i++) {
+                if (str[i] == maxChar) {
+                    // Swap the characters
+                    swap(str, index, i);
+
+                    // If the new number formed is greater than the current maximum, update max
+                    String current = new String(str);
+                    if (current.compareTo(max) > 0) {
+                        max = current;
+                    }
+
+                    // Recur for the remaining swaps
+                    findMaximumNumHelper(str, k - 1, index + 1);
+
+                    // Backtrack: swap the characters back
+                    swap(str, index, i);
+                }
+            }
+        } else {
+            // No need to swap, move to the next index
+            findMaximumNumHelper(str, k, index + 1);
+        }
+    }
+
+    // Utility function to swap two characters in an array
+    private static void swap(char[] str, int i, int j) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+}
