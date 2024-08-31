@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+
+class Solution {
+    static ArrayList<ArrayList<String>> allPalindromicPerms(String S) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        ArrayList<String> currentPartition = new ArrayList<>();
+        backtrack(S, 0, currentPartition, result);
+        return result;
+    }
+
+    // Helper method to perform backtracking
+    private static void backtrack(String S, int start, ArrayList<String> currentPartition, ArrayList<ArrayList<String>> result) {
+        // If we've reached the end of the string, add the current partition to the result
+        if (start == S.length()) {
+            result.add(new ArrayList<>(currentPartition));
+            return;
+        }
+
+        // Try to partition the string in every possible way
+        for (int i = start; i < S.length(); i++) {
+            // If the substring S[start..i] is a palindrome
+            if (isPalindrome(S, start, i)) {
+                // Add the substring to the current partition
+                currentPartition.add(S.substring(start, i + 1));
+                // Recurse on the remaining substring
+                backtrack(S, i + 1, currentPartition, result);
+                // Backtrack by removing the last added substring
+                currentPartition.remove(currentPartition.size() - 1);
+            }
+        }
+    }
+
+    // Helper method to check if a substring is a palindrome
+    private static boolean isPalindrome(String S, int low, int high) {
+        while (low < high) {
+            if (S.charAt(low) != S.charAt(high)) {
+                return false;
+            }
+            low++;
+            high--;
+        }
+        return true;
+    }
+}
